@@ -264,7 +264,7 @@ a {
 }
 
 .site-footer {
-  padding: 40px 24px;
+  padding: 40px 24px 24px;
   color: #e5e7eb;
   background: var(--night);
 }
@@ -278,6 +278,9 @@ a {
 }
 .site-footer a {
   color: #99f6e4;
+}
+.site-footer p {
+  margin: 0;
 }
 
 .quick-contact {

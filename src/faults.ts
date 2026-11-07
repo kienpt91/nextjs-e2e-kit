@@ -14,7 +14,7 @@ export const FAULTS = [
   "tabs-no-arrow-keys",
   "tabs-selection-not-exposed",
   "steps-clipped",
-  "heading-overflow",
+  "wide-element",
   "contact-bar-not-fixed",
   "contact-bar-covers-footer",
   "reduced-motion-ignored",
@@ -35,8 +35,9 @@ export function faultCss(fault: Fault | null): string {
   switch (fault) {
     case "steps-clipped":
       return ".steps-nav{display:flex!important;overflow:hidden}.steps-nav button{flex:0 0 180px!important}";
-    case "heading-overflow":
-      return "h1,h2{white-space:nowrap!important}";
+    case "wide-element":
+      // a decorative element that sticks out of the right edge: the classic cause of a sideways scroll on a phone
+      return 'main{position:relative}main::after{content:"";position:absolute;top:0;left:0;width:480px;height:1px}';
     case "contact-bar-not-fixed":
       return ".quick-contact{position:static!important}";
     case "contact-bar-covers-footer":
