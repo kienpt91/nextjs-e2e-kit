@@ -29,3 +29,6 @@ service-account*.json
 /secrets.toml
 *.tfstate
 *.tfstate.*
+
+# Playwright saved sessions are credentials
+/playwright/.auth/

@@ -1,0 +1,97 @@
+
+> nextjs-e2e-kit@0.1.0 db:wait
+> node src/db/cli.ts wait
+
+database: reachable
+
+> nextjs-e2e-kit@0.1.0 db:migrate
+> node src/db/cli.ts migrate
+
+migrations: applied 1 (0001_content.sql), already applied 0
+
+> nextjs-e2e-kit@0.1.0 db:seed
+> node src/db/cli.ts seed
+
+seed: 9 pages, 15 sections, 6 items
+
+> nextjs-e2e-kit@0.1.0 build
+> next build
+
+▲ Next.js 16.4.3 (Turbopack)
+✓ Running next.config.ts took 48ms
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 919ms
+  Running TypeScript ...
+  Finished TypeScript in 1619ms ...
+  Collecting page data using 4 workers ...
+  Generating static pages using 4 workers (0/1) ...
+✓ Generating static pages using 4 workers (1/1) in 241ms
+  Finalizing page optimization ...
+
+Route (app)
+┌ ƒ /_not-found
+└ ƒ /[[...slug]]
+
+
+ƒ  (Dynamic)  server-rendered on demand
+
+
+Running 50 tests using 2 workers
+
+  ✓   1 [desktop] › e2e/contact-bar.spec.ts:4:1 › the quick contact bar is not shown on a desktop screen @contact-bar (332ms)
+  ✓   3 [desktop] › e2e/header.spec.ts:23:3 › header on desktop › stays at the top of the viewport while the page scrolls @header (226ms)
+  ✓   4 [desktop] › e2e/header.spec.ts:29:3 › header on desktop › shows the links inline and no menu button @header (244ms)
+  ✓   5 [desktop] › e2e/home.spec.ts:6:3 › homepage › answers 200 and shows one main heading @home (242ms)
+  ✓   6 [desktop] › e2e/home.spec.ts:13:3 › homepage › shows its sections in reading order @home-sections (280ms)
+  ✓   2 [desktop] › e2e/header.spec.ts:9:3 › header on desktop › is transparent over the hero and solid after scrolling @header (1.9s)
+  ✓   7 [desktop] › e2e/home.spec.ts:27:5 › page titles › / answers 200 with its own title @titles (311ms)
+  ✓   8 [desktop] › e2e/home.spec.ts:27:5 › page titles › /about answers 200 with its own title @titles (259ms)
+  ✓   9 [desktop] › e2e/home.spec.ts:27:5 › page titles › /pricing answers 200 with its own title @titles (182ms)
+  ✓  10 [desktop] › e2e/home.spec.ts:27:5 › page titles › /contact answers 200 with its own title @titles (214ms)
+  ✓  11 [desktop] › e2e/home.spec.ts:27:5 › page titles › /privacy answers 200 with its own title @titles (237ms)
+  ✓  12 [desktop] › e2e/home.spec.ts:27:5 › page titles › /services/audit answers 200 with its own title @titles (252ms)
+  ✓  13 [desktop] › e2e/home.spec.ts:27:5 › page titles › /services/build answers 200 with its own title @titles (246ms)
+  ✓  14 [desktop] › e2e/home.spec.ts:27:5 › page titles › /services/care answers 200 with its own title @titles (232ms)
+  ✓  16 [desktop] › e2e/links.spec.ts:18:1 › paths that are asked to be ignored are not followed @links-options (683ms)
+  ✓  15 [desktop] › e2e/links.spec.ts:5:1 › every internal link on the site answers 200 @links (946ms)
+  ✓  18 [desktop] › e2e/not-found.spec.ts:6:3 › custom 404 › an unknown address shows the custom page with status 404 @not-found (228ms)
+  ✓  19 [desktop] › e2e/not-found.spec.ts:18:3 › custom 404 › a nested unknown address answers 404 too @not-found (10ms)
+  ✓  20 [desktop] › e2e/not-found.spec.ts:24:3 › custom 404 › a page that exists but is not published answers 404 @not-found (9ms)
+  ✓  21 [desktop] › e2e/not-found.spec.ts:31:3 › custom 404 › an address that cannot be a page is refused the same way @not-found (29ms)
+  ✓  22 [desktop] › e2e/tabs.spec.ts:9:3 › services tabs › expose the tabs pattern to assistive technology @tabs-aria (243ms)
+  ✓  23 [desktop] › e2e/tabs.spec.ts:31:3 › services tabs › move with Left and Right arrows, wrap around, and jump with Home and End @tabs-keyboard (243ms)
+  ✓  24 [desktop] › e2e/tabs.spec.ts:61:3 › services tabs › leave the tab list with Tab and go to the panel's content @tabs-keyboard (176ms)
+  ✓  25 [desktop] › e2e/tabs.spec.ts:69:3 › services tabs › show the content of the tab that is clicked @tabs-click (408ms)
+  ✓  17 [desktop] › e2e/motion.spec.ts:6:1 › without the preference, sections below the fold fade in as they scroll into view @motion-control (1.8s)
+  ✓  26 [mobile] › e2e/layout.mobile.spec.ts:8:1 › the phone project is 375 by 812 @viewport (65ms)
+  ✓  27 [mobile] › e2e/layout.mobile.spec.ts:15:5 › no horizontal scroll at 375 px › /about @no-overflow (175ms)
+  ✓  29 [mobile] › e2e/layout.mobile.spec.ts:15:5 › no horizontal scroll at 375 px › /pricing @no-overflow (190ms)
+  ✓  28 [mobile] › e2e/layout.mobile.spec.ts:15:5 › no horizontal scroll at 375 px › / @no-overflow (231ms)
+  ✓  30 [mobile] › e2e/layout.mobile.spec.ts:15:5 › no horizontal scroll at 375 px › /contact @no-overflow (199ms)
+  ✓  31 [mobile] › e2e/layout.mobile.spec.ts:15:5 › no horizontal scroll at 375 px › /privacy @no-overflow (178ms)
+  ✓  32 [mobile] › e2e/layout.mobile.spec.ts:15:5 › no horizontal scroll at 375 px › /services/audit @no-overflow (206ms)
+  ✓  33 [mobile] › e2e/layout.mobile.spec.ts:15:5 › no horizontal scroll at 375 px › /services/build @no-overflow (203ms)
+  ✓  34 [mobile] › e2e/layout.mobile.spec.ts:15:5 › no horizontal scroll at 375 px › /services/care @no-overflow (279ms)
+  ✓  35 [mobile] › e2e/layout.mobile.spec.ts:27:3 › quick contact bar › is visible at the bottom of the screen on load @contact-bar (324ms)
+  ✓  37 [mobile] › e2e/layout.mobile.spec.ts:45:3 › quick contact bar › offers a phone link, an e-mail link and the contact page @contact-bar (220ms)
+  ✓  38 [mobile] › e2e/layout.mobile.spec.ts:52:3 › quick contact bar › does not cover the last link of the page @contact-bar-clearance (280ms)
+  ✓  39 [mobile] › e2e/mobile-menu.mobile.spec.ts:16:3 › mobile menu › hides the inline links and opens a dialog from the Menu button @menu-open (341ms)
+  ✓  36 [mobile] › e2e/layout.mobile.spec.ts:37:3 › quick contact bar › stays on screen while the page scrolls, on every page @contact-bar (964ms)
+  ✓  40 [mobile] › e2e/mobile-menu.mobile.spec.ts:30:3 › mobile menu › closes with Escape @menu-escape (280ms)
+  ✓  41 [mobile] › e2e/mobile-menu.mobile.spec.ts:37:3 › mobile menu › gives focus back to the Menu button after Escape @menu-focus-return (299ms)
+  ✓  42 [mobile] › e2e/mobile-menu.mobile.spec.ts:44:3 › mobile menu › closes with the Close button and gives focus back to the Menu button @menu-focus-return (360ms)
+  ✓  43 [mobile] › e2e/mobile-menu.mobile.spec.ts:52:3 › mobile menu › keeps keyboard focus inside while it is open @menu-focus-trap (336ms)
+  ✓  44 [mobile] › e2e/mobile-menu.mobile.spec.ts:65:3 › mobile menu › following a link goes to the page and closes the menu @menu-open (370ms)
+  ✓  45 [mobile] › e2e/steps.mobile.spec.ts:9:3 › step buttons on a phone › all fit in the width of the screen and are big enough to touch @steps (1.2s)
+  ✓  47 [reduced-motion] › e2e/motion.reduced-motion.spec.ts:11:3 › prefers-reduced-motion: reduce › the browser really reports the preference @reduced-motion (284ms)
+  ✓  48 [reduced-motion] › e2e/motion.reduced-motion.spec.ts:15:3 › prefers-reduced-motion: reduce › every section is fully visible without scrolling @reduced-motion (239ms)
+  ✓  49 [reduced-motion] › e2e/motion.reduced-motion.spec.ts:26:3 › prefers-reduced-motion: reduce › nothing animates: transitions are off @reduced-motion (220ms)
+  ✓  50 [reduced-motion] › e2e/motion.reduced-motion.spec.ts:32:3 › prefers-reduced-motion: reduce › the content is still there after scrolling to the end @reduced-motion (300ms)
+  ✓  46 [mobile] › e2e/steps.mobile.spec.ts:25:3 › step buttons on a phone › a tap on a step shows that step and marks it as the current one @steps (2.8s)
+
+  50 passed (12.6s)
+
+real	0m19.851s
+user	0m0.505s
+sys	0m0.279s

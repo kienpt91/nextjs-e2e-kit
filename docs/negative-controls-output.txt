@@ -1,0 +1,20 @@
+baseline (no fault): 50 of 50 tests pass
+
+fault                        tests failed  behaviours that failed                   result
+wrong-title                  1 of 50       @titles                                  ok
+section-order                1 of 50       @home-sections                           ok
+broken-link                  1 of 50       @links                                   ok
+soft-404                     4 of 50       @not-found                               ok
+header-never-solid           1 of 50       @header                                  ok
+menu-no-escape               2 of 50       @menu-escape @menu-focus-return          ok
+menu-no-focus-return         2 of 50       @menu-focus-return                       ok
+menu-no-focus-trap           1 of 50       @menu-focus-trap                         ok
+tabs-no-arrow-keys           1 of 50       @tabs-keyboard                           ok
+tabs-selection-not-exposed   1 of 50       @tabs-aria                               ok
+steps-clipped                1 of 50       @steps                                   ok
+wide-element                 1 of 50       @no-overflow                             ok
+contact-bar-not-fixed        2 of 50       @contact-bar                             ok
+contact-bar-covers-footer    1 of 50       @contact-bar-clearance                   ok
+reduced-motion-ignored       1 of 50       @reduced-motion                          ok
+
+every one of the 15 faults was caught by the tests that guard it, and only by those
