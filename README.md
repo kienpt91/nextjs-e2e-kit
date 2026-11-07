@@ -6,7 +6,7 @@ A small, reusable end-to-end kit for a **Next.js site whose content lives in a d
 2. **Do the interactive parts work for keyboard and assistive technology?** A dialog menu that closes on Escape and gives focus back to its button, ARIA tabs that answer to Left, Right, Home and End, a header that is transparent over the hero and solid after scrolling, all found by role and accessible name, never by CSS class.
 3. **Does it work on a phone?** 375 by 812 without sideways scroll on every page, step buttons that fit the screen and are big enough to touch, a bottom contact bar that stays on screen and does not cover the last link.
 4. **Does it respect `prefers-reduced-motion`?** All content is visible without scrolling, with a control test that proves the animation exists without the preference.
-5. **Can the tests fail?** 15 negative controls break the demo site one behaviour at a time, and the suite has to fail in exactly the tests that guard it.
+5. **Can the tests fail?** 15 negative controls break the demo site one behaviour at a time, and the suite has to fail in the tests that carry the tags guarding that behaviour and in no others (judged by tag; six tags have no control, listed in `docs/negative-controls.md`).
 
 It is an original, small, public reference. It has **not** been used in production, has **not** had an independent security review, and **no pipeline has been run on a GitLab runner or on GitHub Actions** (what was verified instead is below). The demo site is a fictional studio with invented content. [Payload CMS](https://payloadcms.com) is the kind of site it was written for; no Payload project was run here (`docs/adapting.md`).
 
@@ -97,11 +97,11 @@ reduced-motion-ignored       1 of 50       @reduced-motion                      
 every one of the 15 faults was caught by the tests that guard it, and only by those
 ```
 
-When a test fails the report says what and where. This is the first lines of a real failure, with the menu fault `menu-no-focus-return`:
+When a test fails the report says what and where. This is the first part of a real failure, with the menu fault `menu-no-focus-return` (the whole output is `docs/menu-focus-failure-output.txt`):
 
 ```
 $ DEMO_FAULT=menu-no-focus-return npx playwright test --project=mobile --grep @menu-focus-return
-  1) [mobile] › mobile-menu.mobile.spec.ts:37:3 › mobile menu › gives focus back to the Menu button after Escape @menu-focus-return
+  1) [mobile] › e2e/mobile-menu.mobile.spec.ts:37:3 › mobile menu › gives focus back to the Menu button after Escape @menu-focus-return
 
     Error: expect(locator).toBeFocused() failed
 
@@ -125,7 +125,7 @@ scripts/node.sh install                 # npm ci --ignore-scripts into the volum
 scripts/test.sh                         # typecheck, unit and integration tests with coverage, against a throwaway PostgreSQL
 scripts/e2e.sh                          # migrate, seed, build, start, run the Playwright suite; report in out/playwright-report
 scripts/e2e.sh --project=mobile         # arguments go to playwright test, for example --grep "@menu"
-scripts/negative-controls.sh            # the 15 negative controls, about four minutes
+scripts/negative-controls.sh            # the 15 negative controls, about three to four minutes
 scripts/gitlab-lint.sh                  # ask a real GitLab (a throwaway container) to lint .gitlab-ci.yml, about three minutes
 open out/playwright-report/index.html   # the HTML report of the last run, on the host (traces: npx playwright show-trace FILE)
 ```
@@ -170,15 +170,15 @@ All of it ran on this machine in containers (Docker on an arm64 Mac; the image i
 | What | Result |
 | --- | --- |
 | Typecheck (`tsc --noEmit`, TypeScript 6.0.3, strict, `noUncheckedIndexedAccess`) | clean (`scripts/test.sh`) |
-| Unit and integration tests (`node --test`), 21 suites | **76 tests pass** in 2.6 s: unit tests of the crawler helpers, the fault switch, the content model, the migration files, the negative-control logic and the CI rules; architecture rules; checks of both CI files; integration tests against a real PostgreSQL 16.14 for the migration runner (once, again, three runners at once, an edited migration, a failing one), the seed (repeated, repairing, rolling back), the schema constraints, the repository and the command line |
+| Unit and integration tests (`node --test`), 23 suites | **82 tests pass** in 2.3 s: unit tests of the crawler helpers, the fault switch, the content model, the migration files, the negative-control logic, the CI rules and the shell scripts (argument quoting of `scripts/e2e.sh`, the commit message guard); architecture rules; checks of both CI files; integration tests against a real PostgreSQL 16.14 for the migration runner (once, again, three runners at once, an edited migration, a failing one), the seed (repeated, repairing, rolling back), the schema constraints, the repository and the command line |
 | Coverage of what those tests are meant to cover (`src/db`, `src/content` model and repository, `src/faults.ts`, the E2E helpers, the negative-control logic) | **lines 100 %, branches 96.55 %, functions 97.50 %**; thresholds 90 / 80 / 90 fail the run. The React components, the routes and the Playwright specs are not in this number: line coverage of a page says nothing about whether a person can use it, and the browser suite is judged by the negative controls instead |
 | Browser suite (`scripts/e2e.sh`), Chromium, 2 workers | **50 tests pass in 12.6 s** (25 desktop, 21 phone at 375 x 812, 4 reduced-motion); the whole pipeline in the container (database up, migrate, seed, build, start, tests) takes 19.9 s |
-| Stability: the same suite five times in a row (`--repeat-each=5`) | 250 of 250 pass in 55 s; no retries are configured |
-| Negative controls (`scripts/negative-controls.sh`) | **15 of 15 faults caught by exactly the tests that guard them**, baseline 50 of 50 green, 3 min 57 s; the first run found three problems in the tests and the demo, listed in `docs/negative-controls.md` |
+| Stability: the same suite five times in a row (`--repeat-each=5`) | 250 of 250 pass in 42.3 s (46.9 s for the whole pipeline), no retries are configured. Transcript: `docs/repeat-each-output.txt` |
+| Negative controls (`scripts/negative-controls.sh`) | **15 of 15 faults caught by exactly the tests that guard them, judged by tag**, baseline 50 of 50 green, 3 min 12 s. Transcript: `docs/negative-controls-output.txt`. Six tags have no fault (`docs/negative-controls.md`, "What has no control"). The first run found three problems in the tests and the demo, listed in `docs/negative-controls.md` |
 | CI definitions (`npm run lint:ci`) | `.gitlab-ci.yml`, `ci.yml` and `release.yml` validate against GitLab's `ci.json` and SchemaStore's `github-workflow.json` (pinned by commit and hash) and against the repository rules; a file with a misspelled `script:` key, an unknown stage, an unpinned image and a mutable action is rejected with 18 findings (`docs/lint-ci-rejects-invalid-output.txt`, samples in `test/fixtures`) |
 | A real GitLab (`scripts/gitlab-lint.sh`: a throwaway GitLab CE 19.5.3 container with no network, the file committed to a project, GitLab's own linter) | `.gitlab-ci.yml`: **valid**, both as a parse and as a dry run of the pipeline for the default branch, 6 jobs. The invalid sample is rejected ("jobs e2e config should implement the script:, run:, or trigger: keyword"). Transcript: `docs/gitlab-lint-output.txt` |
-| A fresh `git clone` (`scripts/node.sh install`, `scripts/test.sh`, `scripts/e2e.sh`) | 76 tests and 50 browser tests pass; the first attempt found two problems that a working copy hides (the mount point of `node_modules` and `next-env.d.ts` in a read-only mount), both fixed |
-| Dependencies (`node ../_tools/check-age.mjs .`, 7 days) | 84 locked packages, none too new |
+| A fresh `git clone` (`scripts/node.sh install`, `scripts/test.sh`, `scripts/e2e.sh`) | 82 tests and 50 browser tests pass (`docs/fresh-clone-output.txt`). An earlier first attempt, not transcribed, had found two problems that a working copy hides (the mount point of `node_modules` and `next-env.d.ts` in a read-only mount); they are fixed in the commits "Create the mount points of the writable directories on the host…" and "Commit next-env.d.ts…" |
+| Dependencies (`node scripts/check-dep-age.mjs`, i.e. `npm run check:deps-age`, 7 days) | 84 locked packages, none too new (`docs/dep-age-output.txt`; the script asks the npm registry, so it needs the network) |
 | Secret scan (`scripts/secret-scan.sh --staged`, on every commit) | clean |
 
 The GitHub workflows were validated against the schema and the repository rules; no GitHub-side linter was run, and nothing was run on GitHub.
