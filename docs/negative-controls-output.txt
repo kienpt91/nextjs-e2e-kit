@@ -18,3 +18,7 @@ contact-bar-covers-footer    1 of 50       @contact-bar-clearance               
 reduced-motion-ignored       1 of 50       @reduced-motion                          ok
 
 every one of the 15 faults was caught by the tests that guard it, and only by those
+
+real	3m12.310s
+user	0m11.088s
+sys	0m4.240s

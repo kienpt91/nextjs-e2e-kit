@@ -1,0 +1,8 @@
+$ scripts/e2e.sh --repeat-each=5     (output filtered to the last lines of the run; the run lists 250 tests)
+
+  250 passed (42.3s)
+
+real	0m46.873s
+user	0m5.297s
+sys	0m2.745s
+(the 3 lines of the form 'real/user/sys' are from the shell builtin time around the whole pipeline: database, migrate, seed, build, start, tests)

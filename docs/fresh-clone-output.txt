@@ -1,0 +1,21 @@
+# A fresh `git clone` of commit af21c33 into an empty directory, commands run from its root (lines of passing tests and
+# of the build left out; the timings are from `time`).
+
+$ scripts/node.sh install
+added 52 packages in 8s
+real 0m9.360s
+
+$ scripts/test.sh
+ℹ tests 82
+ℹ suites 23
+ℹ pass 82
+ℹ fail 0
+ℹ all files | line 100.00 | branch 96.55 | funcs 97.50
+real 0m5.354s
+
+$ scripts/e2e.sh
+migrations: applied 1 (0001_content.sql), already applied 0
+seed: 9 pages, 15 sections, 6 items
+Running 50 tests using 2 workers
+  50 passed (9.2s)
+real 0m14.364s

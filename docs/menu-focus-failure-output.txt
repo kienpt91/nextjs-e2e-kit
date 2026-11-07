@@ -1,0 +1,88 @@
+$ scripts/with-postgres.sh "npm run db:wait && npm run db:migrate && npm run db:seed && npm run build && DEMO_FAULT=menu-no-focus-return npx playwright test --project=mobile --grep @menu-focus-return"   (build output left out)
+Running 2 tests using 2 workers
+
+  ✘  2 [mobile] › e2e/mobile-menu.mobile.spec.ts:37:3 › mobile menu › gives focus back to the Menu button after Escape @menu-focus-return (5.3s)
+  ✘  1 [mobile] › e2e/mobile-menu.mobile.spec.ts:44:3 › mobile menu › closes with the Close button and gives focus back to the Menu button @menu-focus-return (5.3s)
+
+
+  1) [mobile] › e2e/mobile-menu.mobile.spec.ts:37:3 › mobile menu › gives focus back to the Menu button after Escape @menu-focus-return 
+
+    Error: expect(locator).toBeFocused() failed
+
+    Locator:  getByRole('button', { name: 'Menu', exact: true })
+    Expected: focused
+    Received: inactive
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toBeFocused" getByRole('button', { name: 'Menu', exact: true }) with timeout 5000ms
+      - waiting for getByRole('button', { name: 'Menu', exact: true })
+        14 × locator resolved to <button type="button" class="menu-button" aria-expanded="false" aria-haspopup="dialog" aria-controls="mobile-menu">Menu</button>
+           - unexpected value "inactive"
+
+
+      39 |     await page.keyboard.press("Escape");
+      40 |     await expect(menuDialog(page)).toBeHidden();
+    > 41 |     await expect(menuButton(page)).toBeFocused();
+         |                                    ^
+      42 |   });
+      43 |
+      44 |   test("closes with the Close button and gives focus back to the Menu button", { tag: "@menu-focus-return" }, async ({ page }) => {
+        at /work/e2e/mobile-menu.mobile.spec.ts:41:36
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    out/test-results/mobile-menu.mobile-mobile--93a15-he-Menu-button-after-Escape-mobile/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: out/test-results/mobile-menu.mobile-mobile--93a15-he-Menu-button-after-Escape-mobile/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    out/test-results/mobile-menu.mobile-mobile--93a15-he-Menu-button-after-Escape-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace out/test-results/mobile-menu.mobile-mobile--93a15-he-Menu-button-after-Escape-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [mobile] › e2e/mobile-menu.mobile.spec.ts:44:3 › mobile menu › closes with the Close button and gives focus back to the Menu button @menu-focus-return 
+
+    Error: expect(locator).toBeFocused() failed
+
+    Locator:  getByRole('button', { name: 'Menu', exact: true })
+    Expected: focused
+    Received: inactive
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toBeFocused" getByRole('button', { name: 'Menu', exact: true }) with timeout 5000ms
+      - waiting for getByRole('button', { name: 'Menu', exact: true })
+        14 × locator resolved to <button type="button" class="menu-button" aria-expanded="false" aria-haspopup="dialog" aria-controls="mobile-menu">Menu</button>
+           - unexpected value "inactive"
+
+
+      46 |     await closeButton(page).click();
+      47 |     await expect(menuDialog(page)).toBeHidden();
+    > 48 |     await expect(menuButton(page)).toBeFocused();
+         |                                    ^
+      49 |     await expect(menuButton(page)).toHaveAttribute("aria-expanded", "false");
+      50 |   });
+      51 |
+        at /work/e2e/mobile-menu.mobile.spec.ts:48:36
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    out/test-results/mobile-menu.mobile-mobile--b6917-cus-back-to-the-Menu-button-mobile/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: out/test-results/mobile-menu.mobile-mobile--b6917-cus-back-to-the-Menu-button-mobile/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    out/test-results/mobile-menu.mobile-mobile--b6917-cus-back-to-the-Menu-button-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace out/test-results/mobile-menu.mobile-mobile--b6917-cus-back-to-the-Menu-button-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2 failed
+    [mobile] › e2e/mobile-menu.mobile.spec.ts:37:3 › mobile menu › gives focus back to the Menu button after Escape @menu-focus-return 
+    [mobile] › e2e/mobile-menu.mobile.spec.ts:44:3 › mobile menu › closes with the Close button and gives focus back to the Menu button @menu-focus-return 

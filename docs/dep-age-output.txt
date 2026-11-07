@@ -1,0 +1,3 @@
+$ NODE_NET=bridge scripts/node.sh "node scripts/check-dep-age.mjs"     (needs the network: it asks the npm registry for publish dates)
+Checked 84 locked packages against cutoff 2026-10-31T09:51:04.931Z
+None published after the cutoff.
