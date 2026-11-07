@@ -5,7 +5,6 @@
 .DS_Store
 coverage/
 *.tsbuildinfo
-next-env.d.ts
 
 # Secret-like files: never commit these. Use .env.example for documented placeholders.
 .env
