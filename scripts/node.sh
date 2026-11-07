@@ -25,7 +25,8 @@ cutoff=2026-10-31T00:00:00Z
 name=$(basename "$here")
 vol="node-modules-$name"
 [ $# -ge 1 ] || { echo "usage: node.sh install | add PKG... | COMMAND" >&2; exit 2; }
-mkdir -p "$here/out" "$here/.next"
+# the mount points of the writable places must exist in the read-only project mount (a fresh clone has none of them)
+mkdir -p "$here/out" "$here/.next" "$here/node_modules"
 docker volume create "$vol" > /dev/null
 # the volume must be owned by the unprivileged user
 docker run --rm -u 0 -v "$vol:/nm" "$image" chown "$(id -u):$(id -g)" /nm > /dev/null
