@@ -1,9 +1,9 @@
 # Negative controls: proof that the tests can fail
 
-A passing suite says the behaviour works only if the tests would fail when it does not. This kit shows it instead of asserting it: the demo site can be started with one behaviour broken at a time (`DEMO_FAULT=<name>`), and `scripts/negative-controls.sh` runs the whole suite against each broken site and checks that **exactly** the tests that guard that behaviour fail, no more and no fewer. The latest transcript is `docs/negative-controls-output.txt`.
+A passing suite says the behaviour works only if the tests would fail when it does not. This kit shows it for the behaviours listed below instead of asserting it: the demo site can be started with one behaviour broken at a time (`DEMO_FAULT=<name>`), and `scripts/negative-controls.sh` runs the whole suite against each broken site and checks that the tests carrying the tags that guard that behaviour fail, and that no test with any other tag fails. Judging is **by tag**, not by individual test (see "What this does not show"). The latest transcript is `docs/negative-controls-output.txt`.
 
 ```sh
-scripts/negative-controls.sh                       # all faults, about four minutes
+scripts/negative-controls.sh                       # all faults, about three to four minutes
 scripts/with-postgres.sh "npm run db:migrate && npm run db:seed && npm run build && DEMO_FAULT=menu-no-focus-return npx playwright test --project=mobile"
                                                    # one fault by hand, to read the failure
 ```
@@ -30,6 +30,21 @@ A fault is only the behaviour the requirement is about, broken in the most ordin
 
 The plan is `scripts/negative-control-lib.ts`; `test/unit/negative-control-lib.test.ts` checks that it names every fault and that a run where nothing fails, where an unrelated test fails, or where a failing test has no tag is rejected.
 
+## What has no control
+
+Six tags of the suite are guarded by no fault, so nothing shows that these tests can fail:
+
+| Tag | Test |
+| --- | --- |
+| `@home` | the homepage answers 200 and shows one main heading |
+| `@links-options` | paths that are asked to be ignored are not followed |
+| `@tabs-click` | clicking a tab shows its content |
+| `@menu-open` | the menu opens a dialog, and following a link closes it (2 tests) |
+| `@viewport` | the phone project is 375 by 812 |
+| `@motion-control` | without the preference, sections fade in (the control test of the reduced-motion tests) |
+
+Inside the tags that do have a fault, only the tag is judged. `@contact-bar` has four tests, and `contact-bar-not-fixed` fails two of the four (the two phone tests about the bar being on screen); the desktop test of that tag (the bar is not shown on a desktop screen) and the phone test of the phone link, e-mail link and contact page are not shown to be able to fail. `reduced-motion-ignored` may fail any one of the four `@reduced-motion` tests and still count as caught.
+
 ## What it found when it was first run
 
 - A fault that failed tests it should not have touched. `section-order` made the two motion tests fail, because they assumed the section named "contact" is the last one and so below the fold. They now take the last region of the page, whichever it is.
@@ -44,4 +59,4 @@ The plan is `scripts/negative-control-lib.ts`; `test/unit/negative-control-lib.t
 
 ## What this does not show
 
-It does not show that the suite catches every way the behaviour can break; it shows it catches the ways listed. It is not mutation testing: the faults were chosen by hand from the requirements. The fault code lives in the demo site's source and has to be removed when the suite is adopted by another site (`docs/adapting.md`, section 8).
+It does not show that the suite catches every way the behaviour can break; it shows it catches the ways listed, at the granularity of tags, and only for the tags that have a fault. It is not mutation testing: the faults were chosen by hand from the requirements. The fault code lives in the demo site's source and has to be removed when the suite is adopted by another site (`docs/adapting.md`, section 8).
