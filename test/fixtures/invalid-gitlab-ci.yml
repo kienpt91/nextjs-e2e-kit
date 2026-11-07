@@ -1,0 +1,11 @@
+stages: [check]
+e2e:
+  stage: e2e
+  image: node:24
+  services:
+    - postgres:16
+  scrip:
+    - npx playwright test
+  artifacts:
+    when: sometimes
+    paths: out/

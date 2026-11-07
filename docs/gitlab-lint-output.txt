@@ -1,0 +1,15 @@
+=== .gitlab-ci.yml
+waiting for GitLab to start (about two minutes)
+parse only: valid
+  jobs: typecheck-and-unit (check), ci-definitions (check), secret-scan (check), release-scripts (check), dependency-age (check), e2e (e2e)
+dry run of the pipeline for main: valid
+  jobs: typecheck-and-unit (check), ci-definitions (check), secret-scan (check), release-scripts (check), dependency-age (check), e2e (e2e)
+exit 0
+=== a file with a typo in a job and an unknown stage
+waiting for GitLab to start (about two minutes)
+parse only: INVALID
+  error: jobs e2e config should implement the script:, run:, or trigger: keyword
+  error: jobs config should contain at least one visible job
+dry run of the pipeline for main: INVALID
+  error: jobs e2e config should implement the script:, run:, or trigger: keyword
+exit 1

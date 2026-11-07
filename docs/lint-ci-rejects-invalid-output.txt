@@ -1,0 +1,21 @@
+PROBLEM  test/fixtures/invalid-gitlab-ci.yml: /e2e must NOT have additional properties ("scrip")
+PROBLEM  test/fixtures/invalid-gitlab-ci.yml: /e2e/artifacts/paths must be array
+PROBLEM  test/fixtures/invalid-gitlab-ci.yml: /e2e/artifacts/when must be equal to one of the allowed values
+PROBLEM  test/fixtures/invalid-gitlab-ci.yml (stages, extends, needs): e2e: stage "e2e" is not in stages (check)
+PROBLEM  test/fixtures/invalid-workflows/bad.yml: /jobs/test/timeout-minutes must be number
+PROBLEM  test/fixtures/invalid-workflows/bad.yml: /jobs/test/timeout-minutes must match pattern "^\$\{\{(.|[
+])*\}\}$"
+PROBLEM  test/fixtures/invalid-workflows/bad.yml: /jobs/test/timeout-minutes must match exactly one schema in oneOf
+PROBLEM  test/fixtures/invalid-workflows/bad.yml: /jobs/test must have required property 'uses'
+PROBLEM  test/fixtures/invalid-workflows/bad.yml: /jobs/test must NOT have additional properties ("runs-on")
+PROBLEM  test/fixtures/invalid-workflows/bad.yml: /jobs/test must NOT have additional properties ("steps")
+PROBLEM  test/fixtures/invalid-workflows/bad.yml: /jobs/test must NOT have additional properties ("timeout-minutes")
+PROBLEM  test/fixtures/invalid-workflows/bad.yml: /jobs/test must match exactly one schema in oneOf
+PROBLEM  repository rules (digest and SHA pins, read-only token): GitLab CI: e2e.image "node:24" is not pinned by digest
+PROBLEM  repository rules (digest and SHA pins, read-only token): GitLab CI: e2e.services[0] "postgres:16" is not pinned by digest
+PROBLEM  repository rules (digest and SHA pins, read-only token): test/fixtures/invalid-workflows/bad.yml: no top-level permissions block
+PROBLEM  repository rules (digest and SHA pins, read-only token): test/fixtures/invalid-workflows/bad.yml: pull_request_target runs with secrets on code from forks
+PROBLEM  repository rules (digest and SHA pins, read-only token): test/fixtures/invalid-workflows/bad.yml: test uses "actions/checkout@v4", which is not pinned to a full commit SHA
+PROBLEM  repository rules (digest and SHA pins, read-only token): test/fixtures/invalid-workflows/bad.yml: test checkout keeps the token in .git (persist-credentials is not false)
+
+18 problem(s)

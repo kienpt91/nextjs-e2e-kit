@@ -75,4 +75,14 @@ describe("the CI definitions of this repository", () => {
     const all = { ...pkg.devDependencies, ...(JSON.parse(read("package.json")) as { dependencies: Record<string, string> }).dependencies };
     for (const [name, version] of Object.entries(all)) assert.match(version, /^\d+\.\d+\.\d+$/, `${name}@${version}`);
   });
+
+  test("the invalid samples in test/fixtures are rejected by the rules (the schema part of the validator needs the network)", () => {
+    const badGitlab = parse(read("test/fixtures/invalid-gitlab-ci.yml")) as unknown;
+    const badWorkflow = parse(read("test/fixtures/invalid-workflows/bad.yml")) as unknown;
+    assert.ok(checkGitLabPipeline(badGitlab).some((p) => p.includes('stage "e2e" is not in stages')));
+    const problems = checkRepositoryRules(badGitlab, { "bad.yml": badWorkflow });
+    for (const expected of ["not pinned by digest", "pull_request_target", "not pinned to a full commit SHA", "persist-credentials", "no top-level permissions"]) {
+      assert.ok(problems.some((p) => p.includes(expected)), `missing: ${expected}`);
+    }
+  });
 });
