@@ -1,0 +1,106 @@
+# GitLab CI for the Next.js site and its Playwright suite.
+#
+# One image does everything: the official Playwright image (Ubuntu 24.04 "noble", Node 24, Chromium), pinned by digest. Its tag is
+# v1.64.0-noble, built 2026-10-08, and the browsers inside it are the ones @playwright/test 1.64.0 expects (test/unit/ci-definitions.test.ts
+# checks that the version of the package and the version of the image agree). The database is a PostgreSQL service container, also
+# pinned by digest (postgres 16.14, built 2026-08-05), reached at the host name "postgres".
+#
+# The pipeline runs on merge requests, on the default branch and on tags. Nothing here needs a secret: the database is throwaway and trusts
+# connections from the job's own network only.
+
+workflow:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+    - if: $CI_COMMIT_TAG
+
+stages:
+  - check
+  - e2e
+
+default:
+  image: mcr.microsoft.com/playwright@sha256:06a9939e57531807f8d5fd76ce44b53165ffb7d7501d87ab10e285c20b1e971f # v1.64.0-noble
+  interruptible: true
+
+variables:
+  NEXT_TELEMETRY_DISABLED: "1"
+  npm_config_cache: $CI_PROJECT_DIR/.npm
+  # read by the PostgreSQL service container; the service is only reachable from the job that started it
+  POSTGRES_HOST_AUTH_METHOD: trust
+  DATABASE_URL: postgres://postgres@postgres:5432/postgres
+
+.node:
+  cache:
+    key:
+      files:
+        - package-lock.json
+    paths:
+      - .npm/
+  before_script:
+    # no lifecycle scripts of any dependency run: the browsers come from the image
+    - npm ci --ignore-scripts --no-audit --no-fund
+
+.postgres:
+  services:
+    - name: postgres@sha256:95206741a5b214807675e14165369d05b93a9cf692223b616d07cca227e74b0b # 16.14
+      alias: postgres
+
+typecheck-and-unit:
+  stage: check
+  extends:
+    - .node
+    - .postgres
+  script:
+    - npm run typecheck
+    - npm run db:wait
+    # the unit tests and the integration tests that need the database, with coverage thresholds
+    - npm run coverage
+
+ci-definitions:
+  stage: check
+  extends: .node
+  script:
+    # this file and the GitHub workflows, against the vendors' JSON schemas (pinned by commit and checked by hash) and a few rules of our own
+    - npm run lint:ci
+
+secret-scan:
+  stage: check
+  variables:
+    GIT_DEPTH: "0"
+  script:
+    - sh scripts/secret-scan.sh --tree
+    - sh scripts/secret-scan.sh --history
+
+release-scripts:
+  stage: check
+  script:
+    - sh scripts/test-release.sh
+
+dependency-age:
+  stage: check
+  script:
+    # every locked package must be at least seven days old
+    - node scripts/check-dep-age.mjs
+
+e2e:
+  stage: e2e
+  extends:
+    - .node
+    - .postgres
+  timeout: 20 minutes
+  script:
+    - npm run db:wait
+    - npm run db:migrate
+    - npm run db:seed
+    - npm run build
+    # playwright.config.ts starts "npm run start" itself and waits for the site before the first test
+    - npx playwright test
+  artifacts:
+    # the HTML report, the traces and the screenshots of the failed tests, kept for a week; a green run keeps nothing
+    when: on_failure
+    expire_in: 1 week
+    paths:
+      - out/playwright-report/
+      - out/test-results/
+    reports:
+      junit: out/test-results/junit.xml
