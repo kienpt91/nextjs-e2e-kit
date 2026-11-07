@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { slugFromPathSegments } from "../../content/model.ts";
 import { loadPage } from "../../content/server.ts";
-import { parseFault } from "../../faults.ts";
+import { WIDE_ELEMENT_PAGE, parseFault, wideElementCss } from "../../faults.ts";
 import { NOT_FOUND_TITLE, NotFoundContent } from "../../ui/not-found-content.tsx";
 import { ContentSection, HeroSection } from "../../ui/section-view.tsx";
 
@@ -38,6 +38,7 @@ export default async function ContentPage(props: Props) {
   const ordered = fault === "section-order" ? [...content].reverse() : content;
   return (
     <main id="main">
+      {fault === "wide-element" && page.slug === WIDE_ELEMENT_PAGE && <style>{wideElementCss}</style>}
       {hero !== null ? (
         <HeroSection section={hero} />
       ) : (

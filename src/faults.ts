@@ -30,14 +30,17 @@ export function parseFault(value: string | undefined): Fault | null {
   return fault;
 }
 
-/** CSS that is added to the page for the faults that are about layout and motion. */
+/** The one page that has the element sticking out when the fault is "wide-element" (CSS in wideElementCss, added by that page). */
+export const WIDE_ELEMENT_PAGE = "/pricing";
+
+/** A decorative element that sticks out of the right edge: the classic cause of a sideways scroll on a phone. */
+export const wideElementCss = 'main{position:relative}main::after{content:"";position:absolute;top:0;left:0;width:480px;height:1px}';
+
+/** CSS that is added to every page for the faults that are about layout and motion. */
 export function faultCss(fault: Fault | null): string {
   switch (fault) {
     case "steps-clipped":
       return ".steps-nav{display:flex!important;overflow:hidden}.steps-nav button{flex:0 0 180px!important}";
-    case "wide-element":
-      // a decorative element that sticks out of the right edge: the classic cause of a sideways scroll on a phone
-      return 'main{position:relative}main::after{content:"";position:absolute;top:0;left:0;width:480px;height:1px}';
     case "contact-bar-not-fixed":
       return ".quick-contact{position:static!important}";
     case "contact-bar-covers-footer":
